@@ -1,2 +1,6 @@
-some event=2025-05-05 12:00:00
-some other event=2025-05-05 13:00:00
+12:00;some event
+13:00;some other event
+21:15;some other event
+21:42;Test!
+2025-05-07 21:55;alskdjf34567tfrdgjhgf2025-05-07
+21:56;АЙОЦУАЗОЙЦАО
