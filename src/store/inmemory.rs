@@ -1,6 +1,6 @@
 use dashmap::DashMap;
 use std::io::Read;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 pub struct Store {
@@ -25,16 +25,15 @@ impl Store {
     pub fn remove(&self, key: &str) {
         self.data.remove(key);
     }
-    pub fn load_from_file(&self, path: &str) {
+    pub fn load_from_file(&self, path: &PathBuf) {
         let path = Path::new(path);
-        println!("{}", path.display());
         let mut file = std::fs::File::open(path).expect("Failed to open file");
         let mut contents = String::new();
         file.read_to_string(&mut contents)
             .expect("Failed to read file");
 
         for line in contents.lines() {
-            let parts: Vec<&str> = line.split('=').collect();
+            let parts: Vec<&str> = line.split(';').collect();
             if parts.len() == 2 {
                 self.set(parts[0].to_string(), parts[1].to_string());
             }
