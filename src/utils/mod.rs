@@ -10,6 +10,7 @@ pub fn get_resource_path(file_name: &str) -> PathBuf {
     path
 }
 
+#[allow(dead_code)]
 pub fn get_now_as_string_as_date() -> String {
     let time = Local::now();
     time.format("%Y-%m-%d %H:%M").to_string()
@@ -20,6 +21,7 @@ pub fn get_now_as_string_as_time() -> String {
     time.format("%H:%M").to_string()
 }
 
+#[allow(dead_code)]
 pub fn show_system_alert(message: &str) -> Result<(), String> {
     if cfg!(target_os = "windows") {
         // Используем PowerShell для показа оповещения на Windows

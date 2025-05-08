@@ -22,9 +22,11 @@ impl Store {
         self.data.insert(key, value);
     }
 
+    #[cfg(test)]
     pub fn remove(&self, key: &str) {
         self.data.remove(key);
     }
+
     pub fn load_from_file(&self, path: &PathBuf) {
         let path = Path::new(path);
         let mut file = std::fs::File::open(path).expect("Failed to open file");

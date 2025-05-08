@@ -34,13 +34,13 @@ mod tests {
         store.remove("key");
         assert!(store.get("key").is_none());
     }
-}
 
-#[tokio::test]
-async fn test_create_store_from_file() {
-    let path = utils::get_resource_path("scheduler.txt");
-    let st = store::inmemory::Store::new();
-    st.load_from_file(&path);
-    let result = st.get("some event").unwrap();
-    assert_eq!(result, "2025-05-05 12:00:00")
+    #[tokio::test]
+    async fn test_create_store_from_file() {
+        let path = utils::get_resource_path("scheduler.txt");
+        let st = store::inmemory::Store::new();
+        st.load_from_file(&path);
+        let result = st.get("21:42").unwrap();
+        assert_eq!(result, "Test!");
+    }
 }
