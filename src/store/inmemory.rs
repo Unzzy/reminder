@@ -1,9 +1,8 @@
-use chrono::{DateTime, Local};
+// use chrono::{DateTime, Local};
 use dashmap::DashMap;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
-use clap::Parser;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Event {

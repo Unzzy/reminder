@@ -4,11 +4,6 @@ mod utils;
 use tokio::signal;
 use utils::*;
 
-pub struct Test<K: Ord, V> {
-    test: K,
-    d: V,
-}
-
 #[tokio::main]
 async fn main() -> Result<(), String> {
     let interval_sec = 60u64;
@@ -28,8 +23,8 @@ async fn main() -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::store::inmemory::Event;
     use super::*;
+    use crate::store::inmemory::Event;
 
     #[tokio::test]
     async fn test_store() {
@@ -60,6 +55,6 @@ mod tests {
         st.load_from_file(&path);
         let result = st.get("21:42").unwrap();
         let text = result.text;
-        assert_eq!(text,  "Test!");
+        assert_eq!(text, "Test!");
     }
 }

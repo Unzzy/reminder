@@ -24,7 +24,6 @@ pub fn get_now_as_string_as_time() -> String {
 #[allow(dead_code)]
 pub fn show_system_alert(message: &str) -> Result<(), String> {
     if cfg!(target_os = "windows") {
-        // Используем PowerShell для показа оповещения на Windows
         let ps_script = format!(
             "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); \
              [System.Windows.Forms.MessageBox]::Show('{}')",
@@ -57,7 +56,6 @@ pub fn show_system_alert(message: &str) -> Result<(), String> {
 
 pub fn show_system_notification(title: &str, message: &str) -> Result<(), String> {
     if cfg!(target_os = "windows") {
-        // Windows 10+ уведомления через PowerShell
         let ps_script = format!(
             "[reflection.assembly]::loadwithpartialname('System.Windows.Forms'); \
              [reflection.assembly]::loadwithpartialname('System.Drawing'); \
