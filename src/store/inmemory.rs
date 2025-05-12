@@ -1,10 +1,19 @@
+// use chrono::{DateTime, Local};
 use dashmap::DashMap;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct Event {
+    pub date: String,
+    pub time: String,
+    pub title: String,
+    pub text: String,
+}
+
 pub struct Store {
-    data: Arc<DashMap<String, String>>,
+    data: Arc<DashMap<String, Event>>,
 }
 
 impl Store {
@@ -14,17 +23,19 @@ impl Store {
         }
     }
 
-    pub fn get(&self, key: &str) -> Option<String> {
+    pub fn get(&self, key: &str) -> Option<Event> {
         self.data.get(key).map(|v| v.value().clone())
     }
 
-    pub fn set(&self, key: String, value: String) {
+    pub fn set(&self, key: String, value: Event) {
         self.data.insert(key, value);
     }
 
+    #[cfg(test)]
     pub fn remove(&self, key: &str) {
         self.data.remove(key);
     }
+
     pub fn load_from_file(&self, path: &PathBuf) {
         let path = Path::new(path);
         let mut file = std::fs::File::open(path).expect("Failed to open file");
@@ -34,8 +45,14 @@ impl Store {
 
         for line in contents.lines() {
             let parts: Vec<&str> = line.split(';').collect();
-            if parts.len() == 2 {
-                self.set(parts[0].to_string(), parts[1].to_string());
+            if parts.len() == 4 {
+                let event = Event {
+                    date: parts[0].to_string(),
+                    time: parts[1].to_string(),
+                    title: parts[2].to_string(),
+                    text: parts[3].to_string(),
+                };
+                self.set(event.time.clone(), event);
             }
         }
     }

@@ -10,6 +10,7 @@ pub fn get_resource_path(file_name: &str) -> PathBuf {
     path
 }
 
+#[allow(dead_code)]
 pub fn get_now_as_string_as_date() -> String {
     let time = Local::now();
     time.format("%Y-%m-%d %H:%M").to_string()
@@ -20,9 +21,9 @@ pub fn get_now_as_string_as_time() -> String {
     time.format("%H:%M").to_string()
 }
 
+#[allow(dead_code)]
 pub fn show_system_alert(message: &str) -> Result<(), String> {
     if cfg!(target_os = "windows") {
-        // Используем PowerShell для показа оповещения на Windows
         let ps_script = format!(
             "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); \
              [System.Windows.Forms.MessageBox]::Show('{}')",
@@ -55,7 +56,6 @@ pub fn show_system_alert(message: &str) -> Result<(), String> {
 
 pub fn show_system_notification(title: &str, message: &str) -> Result<(), String> {
     if cfg!(target_os = "windows") {
-        // Windows 10+ уведомления через PowerShell
         let ps_script = format!(
             "[reflection.assembly]::loadwithpartialname('System.Windows.Forms'); \
              [reflection.assembly]::loadwithpartialname('System.Drawing'); \
@@ -94,12 +94,11 @@ pub fn show_system_notification(title: &str, message: &str) -> Result<(), String
 
 pub async fn check_scheduled_events(
     store: &Store,
-    title: &str,
     interval_sec: u64,
 ) -> Result<(), String> {
     let time_now = get_now_as_string_as_time();
     if let Some(event) = store.get(&time_now) {
-        show_system_notification(title, &event)?;
+        show_system_notification(&event.title, &event.text)?;
     }
     tokio::time::sleep(std::time::Duration::from_secs(interval_sec)).await;
     Ok(())
