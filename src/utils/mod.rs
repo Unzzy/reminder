@@ -1,5 +1,6 @@
 use crate::store::inmemory::Store;
 use chrono::Local;
+use notify_rust::{Notification, Timeout};
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -55,47 +56,16 @@ pub fn show_system_alert(message: &str) -> Result<(), String> {
 }
 
 pub fn show_system_notification(title: &str, message: &str) -> Result<(), String> {
-    if cfg!(target_os = "windows") {
-        let ps_script = format!(
-            "[reflection.assembly]::loadwithpartialname('System.Windows.Forms'); \
-             [reflection.assembly]::loadwithpartialname('System.Drawing'); \
-             $notify = New-Object System.Windows.Forms.NotifyIcon; \
-             $notify.Icon = [System.Drawing.SystemIcons]::Information; \
-             $notify.BalloonTipTitle = '{}'; \
-             $notify.BalloonTipText = '{}'; \
-             $notify.Visible = $True; \
-             $notify.ShowBalloonTip(5000);",
-            title, message
-        );
-
-        Command::new("powershell")
-            .arg("-Command")
-            .arg(&ps_script)
-            .output()
-            .map_err(|e| format!("Не удалось выполнить PowerShell команду: {}", e))?;
-    } else if cfg!(target_os = "macos") {
-        // macOS уведомления через osascript
-        let apple_script = format!(
-            "display notification \"{}\" with title \"{}\"",
-            message, title
-        );
-
-        Command::new("osascript")
-            .arg("-e")
-            .arg(&apple_script)
-            .output()
-            .map_err(|e| format!("Не удалось выполнить AppleScript команду: {}", e))?;
-    } else {
-        return Err("Платформа не поддерживается".to_string());
-    }
-
+    Notification::new()
+        .summary(title)
+        .body(message)
+        .timeout(Timeout::Milliseconds(5000))
+        .show()
+        .unwrap();
     Ok(())
 }
 
-pub async fn check_scheduled_events(
-    store: &Store,
-    interval_sec: u64,
-) -> Result<(), String> {
+pub async fn check_scheduled_events(store: &Store, interval_sec: u64) -> Result<(), String> {
     let time_now = get_now_as_string_as_time();
     if let Some(event) = store.get(&time_now) {
         show_system_notification(&event.title, &event.text)?;

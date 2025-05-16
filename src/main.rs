@@ -6,7 +6,7 @@ use utils::*;
 
 #[tokio::main]
 async fn main() -> Result<(), String> {
-    let interval_sec = 60u64;
+    let interval_sec = 1u64;
 
     let path = utils::get_resource_path("scheduler.csv");
     let store = store::inmemory::Store::new();
