@@ -1,20 +1,31 @@
 mod store;
 mod utils;
 
+use std::env;
+use std::path::PathBuf;
 use tokio::signal;
-use utils::*;
 
 #[tokio::main]
 async fn main() -> Result<(), String> {
-    let interval_sec = 30u64;
-
-    let path = utils::get_resource_path("scheduler.csv");
+    let interval_sec = 30u64; // Количество секунд в интервале проверки событий
+    let args = env::args().collect::<Vec<String>>();
+    let path = if args.len() > 1 {
+        let input_path = PathBuf::from(&args[1]);
+        if input_path.is_absolute() {
+            input_path
+        } else {
+            let current_dir = env::current_dir().expect("Failed to get current directory");
+            current_dir.join(input_path)
+        }
+    } else {
+        utils::utils::get_resource_path("scheduler.csv")
+    };
     let store = store::inmemory::Store::new();
     store.load_from_file(&path);
     loop {
         tokio::select! {
             _ = signal::ctrl_c() => break,
-            _ = check_scheduled_events(&store, interval_sec) => {}
+            _ = utils::utils::check_scheduled_events(&store, interval_sec) => {}
         }
     }
     println!("Выполнение программы завершено корректно");
@@ -50,7 +61,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_create_store_from_file() {
-        let path = utils::get_resource_path("scheduler.csv");
+        let path = utils::utils::get_resource_path("scheduler.csv");
         let st = store::inmemory::Store::new();
         st.load_from_file(&path);
         let result = st.get("21:42").unwrap();
