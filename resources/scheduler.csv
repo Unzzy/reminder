@@ -1,6 +1,7 @@
-date;time;title;text
-everyday;12:00;event;some event
-workday;21:42;Training;Test!
-2025-05-07;21:55;Test;alskdjf34567tfrdgjhgf2025-05-07
-holiday;21:56;Some titile;АЙОЦУАЗОЙЦАО
-test;00:38;Hello;Have a nice day
+date;time;type;title;text
+asd;11:55;info;Break;5 minutes of sport
+asd;12:17;info;Test;t stashtest asd sdlflasdkgj
+asd;12:55;info;Break;5 minutes of sport
+asd;23:03;info;Break;Test INFO
+asd;23:11;warn;Break;TEST WARN
+113;23:11;INFO;CAPITALIZE; TEST CAPITALIZE
