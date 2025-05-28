@@ -7,7 +7,7 @@ use tokio::signal;
 
 #[tokio::main]
 async fn main() -> Result<(), String> {
-    let interval_sec = 30u64; // Количество секунд в интервале проверки событий
+    let interval_sec = 1u64; // Количество секунд в интервале проверки событий
     let args = env::args().collect::<Vec<String>>();
     let path = if args.len() > 1 {
         let input_path = PathBuf::from(&args[1]);
@@ -20,6 +20,7 @@ async fn main() -> Result<(), String> {
     } else {
         utils::utils::get_resource_path("scheduler.csv")
     };
+
     let store = store::inmemory::Store::new();
     store.load_from_file(&path);
     loop {

@@ -8,6 +8,7 @@ use std::sync::Arc;
 pub struct Event {
     pub date: String,
     pub time: String,
+    pub message_type: String,
     pub title: String,
     pub text: String,
 }
@@ -45,12 +46,13 @@ impl Store {
 
         for line in contents.lines() {
             let parts: Vec<&str> = line.split(';').collect();
-            if parts.len() == 4 {
+            if parts.len() == 5 {
                 let event = Event {
                     date: parts[0].to_string(),
                     time: parts[1].to_string(),
-                    title: parts[2].to_string(),
-                    text: parts[3].to_string(),
+                    message_type: parts[2].to_ascii_lowercase(),
+                    title: parts[3].trim().to_string(),
+                    text: parts[4].trim().to_string(),
                 };
                 self.set(event.time.clone(), event);
             }

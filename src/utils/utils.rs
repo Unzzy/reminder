@@ -22,7 +22,6 @@ pub fn get_now_as_string_as_time() -> String {
     time.format("%H:%M").to_string()
 }
 
-#[allow(dead_code)]
 pub fn show_system_alert(message: &str) -> Result<(), String> {
     if cfg!(target_os = "windows") {
         let ps_script = format!(
@@ -37,7 +36,6 @@ pub fn show_system_alert(message: &str) -> Result<(), String> {
             .output()
             .map_err(|e| format!("Failed to execute PowerShell command: {}", e))?;
     } else if cfg!(target_os = "macos") {
-        // Используем osascript для показа оповещения на macOS
         let apple_script = format!(
             "display dialog \"{}\" with title \"Уведомление\" buttons {{\"OK\"}} default button \"OK\"",
             message
@@ -68,7 +66,11 @@ pub fn show_system_notification(title: &str, message: &str) -> Result<(), String
 pub async fn check_scheduled_events(store: &Store, interval_sec: u64) -> Result<(), String> {
     let time_now = get_now_as_string_as_time();
     if let Some(event) = store.get(&time_now) {
-        show_system_notification(&event.title, &event.text)?;
+        match event.message_type.as_str() {
+            "info" => show_system_notification(&event.title, &event.text)?,
+            "warn" => show_system_alert(&event.text)?,
+            _ => return Err("Invalid message type".to_string()),
+        }
     }
     tokio::time::sleep(std::time::Duration::from_secs(interval_sec)).await;
     Ok(())

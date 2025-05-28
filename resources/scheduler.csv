@@ -1,6 +1,7 @@
-date;time;title;text
-asd;11:55;Break;5 minutes of sport
-asd;12:17;Test;t stashtest asd sdlflasdkgj
-asd;12:55;Break;5 minutes of sport
-asd;23:37;Break;оажыдва
-asd;10:33;Break;оажыдва
+date;time;type;title;text
+asd;11:55;info;Break;5 minutes of sport
+asd;12:17;info;Test;t stashtest asd sdlflasdkgj
+asd;12:55;info;Break;5 minutes of sport
+asd;23:03;info;Break;Test INFO
+asd;23:11;warn;Break;TEST WARN
+113;23:11;INFO;CAPITALIZE; TEST CAPITALIZE
