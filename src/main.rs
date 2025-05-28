@@ -44,6 +44,7 @@ mod tests {
         let event = Event {
             date: "test_date".to_string(),
             time: "21:00".to_string(),
+            message_type: "info".to_string(),
             title: "test title".to_string(),
             text: "test text".to_string(),
         };
@@ -51,6 +52,7 @@ mod tests {
         let test_event = Event {
             date: "test_date".to_string(),
             time: "21:00".to_string(),
+            message_type: "info".to_string(),
             title: "test title".to_string(),
             text: "test text".to_string(),
         };
