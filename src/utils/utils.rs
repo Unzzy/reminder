@@ -67,11 +67,40 @@ pub async fn check_scheduled_events(store: &Store, interval_sec: u64) -> Result<
     let time_now = get_now_as_string_as_time();
     if let Some(event) = store.get(&time_now) {
         match event.message_type.as_str() {
-            "info" => show_system_notification(&event.title, &event.text)?,
-            "warn" => show_system_alert(&event.text)?,
+            "info" => {
+                show_system_notification(&event.title, &event.text)?;
+                play_system_sound();
+            }
+            "warn" => {
+                show_system_alert(&event.text)?;
+                play_system_sound();
+            }
             _ => return Err("Invalid message type".to_string()),
         }
     }
     tokio::time::sleep(std::time::Duration::from_secs(interval_sec)).await;
     Ok(())
+}
+
+pub fn play_system_sound() {
+    if cfg!(windows) {
+        Command::new("cmd")
+            .args(&["/C", "rundll32 user32.dll,MessageBeep"])
+            .spawn()
+            .unwrap();
+    } else if cfg!(target_os = "macos") {
+        Command::new("afplay")
+            .arg("/System/Library/Sounds/Submarine.aiff")
+            .spawn()
+            .unwrap();
+    } else if cfg!(target_os = "linux") {
+        let _ = Command::new("paplay")
+            .arg("/usr/share/sounds/freedesktop/stereo/message.oga")
+            .spawn()
+            .or_else(|_| {
+                Command::new("aplay")
+                    .arg("/usr/share/sounds/alsa/Front_Center.wav")
+                    .spawn()
+            });
+    }
 }

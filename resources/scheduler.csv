@@ -1,7 +1,10 @@
 date;time;type;title;text
-asd;11:55;info;Break;5 minutes of sport
-asd;12:17;info;Test;t stashtest asd sdlflasdkgj
-asd;12:55;info;Break;5 minutes of sport
-asd;23:03;info;Break;Test INFO
-asd;23:11;warn;Break;TEST WARN
-113;23:11;INFO;CAPITALIZE; TEST CAPITALIZE
+weekday;10:55;info;Sink;5 minutes to sink
+weekday;10:59;warn;ALARM;1 minutes to sink
+12.05;11:55;info;Break;5 minutes of sport
+everyday;12:55;info;Break;5 minutes of sport
+everyday;13:55;info;Break;5 minutes to lunch
+everyday;15:55;info;Break;5 minutes of rest
+everyday;16:55;info;Break;Last break today!
+everyday;17:55;info;Break;5 minutes for end of work!
+once;23:20;INFO;CAPITALIZE; TEST CAPITALIZE and SOUND

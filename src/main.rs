@@ -7,7 +7,7 @@ use tokio::signal;
 
 #[tokio::main]
 async fn main() -> Result<(), String> {
-    let interval_sec = 1u64; // Количество секунд в интервале проверки событий
+    let interval_sec = 30u64; // Количество секунд в интервале проверки событий
     let args = env::args().collect::<Vec<String>>();
     let path = if args.len() > 1 {
         let input_path = PathBuf::from(&args[1]);
@@ -44,6 +44,7 @@ mod tests {
         let event = Event {
             date: "test_date".to_string(),
             time: "21:00".to_string(),
+            message_type: "test_message_type".to_string(),
             title: "test title".to_string(),
             text: "test text".to_string(),
         };
@@ -51,6 +52,7 @@ mod tests {
         let test_event = Event {
             date: "test_date".to_string(),
             time: "21:00".to_string(),
+            message_type: "test_message_type".to_string(),
             title: "test title".to_string(),
             text: "test text".to_string(),
         };
