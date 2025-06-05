@@ -3,6 +3,7 @@ use chrono::Local;
 use notify_rust::{Notification, Timeout};
 use std::path::PathBuf;
 use std::process::Command;
+use std::thread;
 
 pub fn get_resource_path(file_name: &str) -> PathBuf {
     let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
@@ -70,10 +71,12 @@ pub async fn check_scheduled_events(store: &Store, interval_sec: u64) -> Result<
             "info" => {
                 show_system_notification(&event.title, &event.text)?;
                 play_system_sound();
+                thread::sleep(std::time::Duration::from_secs(60));
             }
             "warn" => {
                 show_system_alert(&event.text)?;
                 play_system_sound();
+                thread::sleep(std::time::Duration::from_secs(60));
             }
             _ => return Err("Invalid message type".to_string()),
         }
